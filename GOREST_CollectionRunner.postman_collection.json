@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "23f0f11b-6270-46ea-aabe-f81fca58cea9",
+		"name": "GOREST_CollectionRunner",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36014342"
+	},
+	"item": [
+		{
+			"name": "Post_Runner",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var r_name = pm.collectionVariables.replaceIn(\"{{$randomFullName}}\");",
+							"pm.collectionVariables.set('ran_fullname',r_name);",
+							"",
+							"var r_email = pm.collectionVariables.replaceIn(\"{{$randomEmail}}\");",
+							"pm.collectionVariables.set('ran_email',r_email);",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const reponse = pm.response.json();",
+							"pm.collectionVariables.set('genratedId',reponse.id);",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{ran_fullname}}\",\n    \"email\": \"{{ran_email}}\",\n    \"gender\": \"male\",\n    \"status\": \"active\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostname}}//public/v2/users",
+					"host": [
+						"{{hostname}}"
+					],
+					"path": [
+						"",
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_Runner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const response = pm.response.json();",
+							"pm.test(\"Verify name\",function(){",
+							"    pm.expect(pm.collectionVariables.get('ran_fullname')).to.be.eql(response.name);",
+							"})",
+							"pm.test(\"Verify r_email\",function(){",
+							"    pm.expect(pm.collectionVariables.get('ran_email')).to.be.eql(response.email);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{genratedId}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{genratedId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearer_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ran_fullname",
+			"value": ""
+		},
+		{
+			"key": "ran_email",
+			"value": ""
+		},
+		{
+			"key": "genratedId",
+			"value": ""
+		}
+	]
+}
